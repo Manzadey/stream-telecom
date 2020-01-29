@@ -1,0 +1,40 @@
+{
+  "name": "manzadey/stream-telecom",
+  "description": "PHP Package for stream-telecom.ru",
+  "keywords": [
+    "sms",
+    "stream-telecom",
+    "api",
+    "streamtelecom",
+    "streamtelecomru"
+  ],
+  "homepage": "https://github.com/Manzadey/StreamTelecomSendSMS",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrey Manzadey",
+      "email": "andrey.manzadey@gmail.com",
+      "homepage": "https://github.com/Manzadey",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Manzadey\\StreamTelecom\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Manzadey\\StreamTelecom\\Test\\": "tests"
+    }
+  },
+  "require": {
+    "php": "^7.1.3",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5",
+    "symfony/var-dumper": "^5.0"
+  }
+}
