@@ -58,7 +58,7 @@ class SmsSend implements ResponseInterface
      */
     public function text(string $text) : self
     {
-        $this->data = urlencode($text);
+        $this->data = $text;
 
         return $this;
     }
