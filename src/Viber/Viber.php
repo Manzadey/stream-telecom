@@ -178,6 +178,9 @@ class Viber
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function get()
     {
         $data = array_filter(get_object_vars($this));
