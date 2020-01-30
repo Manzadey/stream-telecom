@@ -9,11 +9,11 @@ abstract class Session
     /**
      * @var string
      */
-    protected $login;
+    public $login;
     /**
      * @var string
      */
-    protected $password;
+    public $password;
     /**
      * @var string
      */
@@ -21,15 +21,25 @@ abstract class Session
     /**
      * @var string
      */
-    protected $sessionId = '';
+    protected $sessionId;
     /**
-     * @var string
-     */
-    protected $vkId;
-    /**
+     * Password from your personal account
+     *
      * @var string
      */
     protected $passwordPa;
+    /**
+     * VK Service Name
+     *
+     * @var string
+     */
+    protected $service;
+    /**
+     * Viber Source Address
+     *
+     * @var string
+     */
+    protected $sourceAddressIM;
 
     /**
      * Session constructor.
@@ -37,34 +47,23 @@ abstract class Session
      * @param string $name
      * @param string $login
      * @param string $password
-     * @param string $passwordPa
-     * @param string $vkId
      */
-    final public function __construct(string $name, string $login, string $password, string $passwordPa = '', string $vkId = '')
+    final public function __construct(string $name, string $login, string $password)
     {
         $this->sourceAddress = $name;
         $this->login         = $login;
         $this->password      = $password;
-        $this->passwordPa   = $passwordPa;
-        $this->vkId         = $vkId;
 
-        $this->setupSession();
+        $this->setup()->session();
 
     }
 
     /**
-     * @return void
+     * @return Setup
      */
-    private function setupSession() : void
+    public function setup() : Setup
     {
-        $response = $this->client('rest')->request('POST', 'Session/', [
-            'form_params' => [
-                'login'    => $this->login,
-                'password' => $this->password,
-            ],
-        ]);
-
-        $this->sessionId = json_decode($response->getBody(), true);
+        return new Setup($this);
     }
 
     /**
@@ -72,7 +71,7 @@ abstract class Session
      *
      * @return Client
      */
-    protected function client(string $name) : Client
+    public function client(string $name) : Client
     {
         $client = new Client();
 
@@ -110,5 +109,37 @@ abstract class Session
     public function getSessionId() : string
     {
         return $this->sessionId;
+    }
+
+    /**
+     * @param string $service
+     */
+    public function setService(string $service) : void
+    {
+        $this->service = $service;
+    }
+
+    /**
+     * @param string $sourceAddressIM
+     */
+    public function setSourceAddressIM(string $sourceAddressIM) : void
+    {
+        $this->sourceAddressIM = $sourceAddressIM;
+    }
+
+    /**
+     * @param string $passwordPa
+     */
+    public function setPasswordPa(string $passwordPa) : void
+    {
+        $this->passwordPa = $passwordPa;
+    }
+
+    /**
+     * @param string $sessionId
+     */
+    public function setSessionId(string $sessionId) : void
+    {
+        $this->sessionId = $sessionId;
     }
 }
