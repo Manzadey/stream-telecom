@@ -21,7 +21,7 @@ composer require manzadey/stream-telecom
 ```php
 use Manzadey\StreamTelecom\StreamTelecom;
 
-$st = new StreamTelecom('name', 'login', 'password', 'password_from_personal_account');
+$st = new StreamTelecom('name', 'login', 'password');
 ```
 
 ## Просмотр баланса
@@ -117,6 +117,10 @@ $st->sms()->incoming()->start('29.01.2020 13:00')->end('30.01.2020 13:00')->get(
 ```
 
 ## Email
+**Установка соединения**
+```php
+$st->setup()->email('password_from_pa');
+```
 ### Работа с базами
 Получение списка баз
 ```php
@@ -159,4 +163,31 @@ $st->email()->list()->method('delete_member')->memberId(123)->get();
 $st->email()->list()->method('unsubscribe_member')->memberId(123)->listId(123)->email('testuser@mail.com')->reason('Отписка по заявке')->get();
 ```
 ## Viber
+**Установка соединения**
+```php
+$st->setup()->viber('sourceAddressIM');
+```
+Отправка сообщения: _только текст_
+```php
+$st->viber()->text('Привет вайбер')->to([79211234567])->validity(7200)->get();
+```
+Отправка сообщения: _только картинка_
+```php
+$st->viber()->image('https://my.site.com/images/image.jpg')->to([79211234567])->validity(7200)->get();
+```
+Отправка сообщения: _с кнопкой, картинкой и текстом_
+```php
+$st->viber()->text('Привет вайбер')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to([79211234567])->validity(7200)->get();
+```
+Отправка сообщения: _с кнопкой, картинкой и текстом, с методом каскад_
+```php
+$st->viber()->text('Привет вайбер')->sms('Текст резервного сообщения по sms')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to([79211234567])->validity(7200)->get();
+```
+Получение статусов
+```php
+$st->viber()->messageId(12345)->get();
+```
 ## VK
+```php
+$st->setup()->viber('service');
+```

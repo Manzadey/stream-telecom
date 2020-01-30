@@ -17,7 +17,8 @@ class Constants
     public const URI_TARIFFS = 'Balance/price_list.php';
     public const URI_SMS_INCOMING = 'Incoming';
     public const URI_VIBER_SEND = 'Send/SendIM/ViberOne/';
-    public const UTI_VIBER_STATUS = 'State/Viber/';
+    public const URI_VIBER_STATUS = 'State/Viber/';
+    public const URI_VIBER_BULK = 'Send/SendIM/ViberBulk/';
 
     public const QUERY_SIMPLE = [
         'uri'   => 'Send/SendSms/',

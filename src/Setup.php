@@ -2,7 +2,7 @@
 
 namespace Manzadey\StreamTelecom;
 
-class Setup
+final class Setup
 {
     /**
      * @var Session

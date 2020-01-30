@@ -8,6 +8,7 @@ use Manzadey\StreamTelecom\Support\Helpers;
 
 class Viber
 {
+    public static $count_package = 1;
     /**
      * @var string
      */
@@ -44,6 +45,10 @@ class Viber
      * @var StreamTelecom
      */
     private $streamTelecom;
+    /**
+     * @var array
+     */
+    private $phones;
 
     /**
      * Viber constructor.
@@ -72,19 +77,55 @@ class Viber
     /**
      *  Номер получателя сообщения Viber
      *
-     * @param array $phone
+     * @param int $phone
      *
      * @return $this
      */
-    public function to(array $phones) : self
+    public function to(int $phone) : self
     {
-        $to = Helpers::phonesProcessing($phones);
+        $this->phone = $phone;
 
-        if ($to === '') {
-            throw new \InvalidArgumentException('Отсутствуют валидные номера! Проверьте правильность вводимых номеров.');
+        return $this;
+    }
+
+    /**
+     * @param \Closure $closure
+     *
+     * @return $this
+     */
+    public function package(\Closure $closure) : self
+    {
+        $fields = [
+            'phone',
+            'validityPeriod',
+            'textIM',
+            'imageURL',
+            'buttonURL',
+            'buttonText',
+            'textSMS',
+        ];
+
+        $array = array_filter(get_object_vars($closure($this)));
+
+        $attributes = array_filter($array, static function ($a) use ($fields) {
+            return in_array($a, $fields, true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        $attributes['type_viber'] = 'text';
+
+        if (isset($attributes['imageURL'])) {
+            $attributes['type_viber'] = 'image';
         }
 
-        $this->phone = $phones;
+        if (isset($attributes['buttonText'], $attributes['buttonURL'])) {
+            $attributes['type_viber'] = 'button';
+        }
+
+        $this->phones[self::$count_package++] = $attributes;
+
+        foreach (array_keys($attributes) as $attribute) {
+            unset($this->$attribute);
+        }
 
         return $this;
     }
@@ -153,7 +194,7 @@ class Viber
      *
      * @return $this
      */
-    public function sms(string $text = '') : self
+    public function sms(string $text = null) : self
     {
         if ($this->textIM === null) {
             throw new \RuntimeException('Укажите текст сообщения!');
@@ -183,13 +224,18 @@ class Viber
      */
     public function get()
     {
+
         $data = array_filter(get_object_vars($this));
         $uri  = Constants::URI_VIBER_SEND;
 
         if ($this->messageId) {
-            $uri = Constants::UTI_VIBER_STATUS;
+            $uri = Constants::URI_VIBER_STATUS;
         }
 
-        return $this->streamTelecom->request($uri, $data);
+        if ($this->phones) {
+            $uri = Constants::URI_VIBER_BULK;
+        }
+
+        return $this->streamTelecom->requestViber($uri, $data);
     }
 }
