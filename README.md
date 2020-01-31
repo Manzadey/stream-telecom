@@ -183,11 +183,51 @@ $st->viber()->text('Привет вайбер')->image('https://my.site.com/imag
 ```php
 $st->viber()->text('Привет вайбер')->sms('Текст резервного сообщения по sms')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to([79211234567])->validity(7200)->get();
 ```
+Пакетная отправка 
+```php
+$st->viber()
+->package(static function ($v) {
+    return $v->text('Привет вайбер')->to(79211234567)->validity(7200);
+})
+->package(static function ($v) {
+    return $v->image('https://my.site.com/images/image.jpg')->to(79211234567)->validity(7200);
+})
+->package(static function ($v) {
+    return $v->text('Привет вайбер')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to(79211234567)->validity(7200);
+})
+->package(static function ($v) {
+    return $v->text('Привет вайбер')->sms('Текст резервного сообщения по sms')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to(79211234567)->validity(7200);
+})
+->get();
+```
 Получение статусов
 ```php
 $st->viber()->messageId(12345)->get();
 ```
 ## VK
+**Установка соединения**
 ```php
-$st->setup()->viber('service');
+$st->setup()->vk('service');
+```
+Отправка уведомления:
+```php
+$st->vk()->idTmpl(8)->tmplData(['username' => 'Alexey', 'balance' => '1000000'])->ttl(60)->to(79999999998)->get();
+```
+Пакетная отправка уведомений:
+```php
+$st->vk()->package(static function ($c) {
+    return $c->to(7911102461)->idTmpl(8)->tmplData([
+        'username' => 'Alexey',
+        'balance'  => 1,
+    ])->ttl(1);
+})->package(static function ($c) {
+    return $c->to(7911102461)->idTmpl(8)->tmplData([
+        'username' => 'Andrey',
+        'balance'  => 2,
+    ])->ttl(1);
+})->get();
+```
+Отправка каскадных сообщений в VK
+```php
+
 ```

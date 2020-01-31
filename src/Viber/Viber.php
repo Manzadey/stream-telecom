@@ -220,12 +220,20 @@ class Viber
     }
 
     /**
+     * @return array
+     */
+    public function data() : array
+    {
+        return array_filter(get_object_vars($this));
+    }
+
+    /**
      * @return mixed
      */
     public function get()
     {
 
-        $data = array_filter(get_object_vars($this));
+        $data = $this->data();
         $uri  = Constants::URI_VIBER_SEND;
 
         if ($this->messageId) {

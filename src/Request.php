@@ -61,7 +61,7 @@ abstract class Request extends Session
     final public function requestVK(array $data)
     {
         if (!$this->service) {
-            throw new \RuntimeException('Установите Идентификатор группы ВКонтакте! $c->setup()->vk("serviceName")');
+            throw new \RuntimeException('Установите идентификатор группы ВКонтакте.');
         }
 
         $data = array_filter(array_merge($data, [
@@ -70,16 +70,32 @@ abstract class Request extends Session
             'service' => $this->service,
         ]));
 
+        if (isset($data['extra_param']['sms'])) {
+            $data['extra_param']['sms']['sourceAddressSMS'] = $this->sourceAddress;
+        }
+
+        if (isset($data['extra_param']['viber'])) {
+            $data['extra_param']['viber']['sourceAddressIM'] = $this->sourceAddressIM;
+        }
+        
         $response = $this->client('vk')->request('PUT', Constants::SERVER_VK, ['json' => $data])->getBody();
 
         return json_decode($response, true);
     }
 
+    /**
+     * @param string $uri
+     * @param array  $data
+     *
+     * @return mixed
+     */
     final public function requestViber(string $uri, array $data)
     {
         if (!$this->sourceAddressIM) {
-            throw new \RuntimeException('Установите Имя отправителя, зарегистрированное для Viber $c->setup()->viber("name")');
+            throw new \RuntimeException('Установите имя отправителя, зарегистрированное для Viber.');
         }
+
+        ($uri === Constants::URI_VIBER_BULK) ? $format_data = 'json' : $format_data = 'form_params';
 
         if (!empty($data['textSMS'])) {
             $data['sourceAddressSMS'] = $this->sourceAddress;
@@ -92,14 +108,14 @@ abstract class Request extends Session
         ]));
 
         if (isset($data['phones'])) {
-            foreach ($data['phones'] ad $item) {
-
+            foreach ($data['phones'] as $k => $item) {
+                if (array_key_exists('textSMS', $item)) {
+                    $data['phones'][$k]['sourceAddressSMS'] = $this->sourceAddress;
+                }
             }
         }
 
-        dd($data);
-
-        $response = $this->client('rest')->request('POST', $uri, ['form_params' => $data])->getBody();
+        $response = $this->client('rest')->request('POST', $uri, [$format_data => $data])->getBody();
 
         return json_decode($response, true);
 
