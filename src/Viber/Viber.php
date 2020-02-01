@@ -226,6 +226,7 @@ class Viber
     {
 
         $data = array_filter(get_object_vars($this));
+        
         $uri  = Constants::URI_VIBER_SEND;
 
         if ($this->messageId) {
