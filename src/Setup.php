@@ -21,7 +21,7 @@ final class Setup
 
     public function session() : void
     {
-        $response = $this->session->client('rest')->request('POST', 'Session/', [
+        $response = $this->session->client('rest')->request('POST', Constants::URI_SESSION, [
             'form_params' => [
                 'login'    => $this->session->login,
                 'password' => $this->session->password,

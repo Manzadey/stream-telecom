@@ -8,6 +8,7 @@ class Constants
     public const SERVER_EMAIL = 'http://api.streamemail.ru/';
     public const SERVER_VK = 'https://gateway.api.sc/rest/Send/SendIM/VKNotify/';
 
+    public const URI_SESSION = 'Session/';
     public const URI_STATUS_MESSAGE = 'State/state.php';
     public const URI_SEND_HLR = 'Send/SendHLR/';
     public const URI_STATE_HLR = 'State/HLR/';
