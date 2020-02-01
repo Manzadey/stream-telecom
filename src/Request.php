@@ -70,7 +70,7 @@ abstract class Request extends Session
             'service' => $this->service,
         ]));
 
-        $response = $this->client('vk')->request('PUT', Constants::SERVER_VK, ['json' => $data])->getBody();
+        $response = $this->client('rest', 'json')->request('PUT', Constants::URI_VK_SEND, ['json' => $data])->getBody();
 
         return json_decode($response, true);
     }

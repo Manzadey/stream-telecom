@@ -71,7 +71,7 @@ abstract class Session
      *
      * @return Client
      */
-    public function client(string $name) : Client
+    public function client(string $name, string $contentType = 'x-www-form-urlencoded') : Client
     {
         $client = new Client();
 
@@ -79,7 +79,7 @@ abstract class Session
             $client = new Client([
                 'base_uri' => Constants::SERVER_REST,
                 'headers'  => [
-                    'content-type' => 'application/x-www-form-urlencoded',
+                    'content-type' => 'application/' . $contentType,
                 ],
             ]);
         }
@@ -88,14 +88,6 @@ abstract class Session
             $client = new Client([
                 'headers' => [
                     'content-type' => 'application/x-www-form-urlencoded',
-                ],
-            ]);
-        }
-
-        if ($name === 'vk') {
-            new Client([
-                'headers' => [
-                    'content-type' => 'application/json',
                 ],
             ]);
         }

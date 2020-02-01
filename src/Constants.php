@@ -6,7 +6,6 @@ class Constants
 {
     public const SERVER_REST = 'https://gateway.api.sc/rest/';
     public const SERVER_EMAIL = 'http://api.streamemail.ru/';
-    public const SERVER_VK = 'https://gateway.api.sc/rest/Send/SendIM/VKNotify/';
 
     public const URI_SESSION = 'Session/';
     public const URI_STATUS_MESSAGE = 'State/state.php';
@@ -20,6 +19,7 @@ class Constants
     public const URI_VIBER_SEND = 'Send/SendIM/ViberOne/';
     public const URI_VIBER_STATUS = 'State/Viber/';
     public const URI_VIBER_BULK = 'Send/SendIM/ViberBulk/';
+    public const URI_VK_SEND = 'Send/SendIM/VKNotify/';
 
     public const QUERY_SIMPLE = [
         'uri'   => 'Send/SendSms/',
