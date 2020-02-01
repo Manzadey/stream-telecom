@@ -97,8 +97,6 @@ abstract class Request extends Session
             }
         }
 
-        dd($data);
-
         $response = $this->client('rest')->request('POST', $uri, ['form_params' => $data])->getBody();
 
         return json_decode($response, true);
