@@ -1,6 +1,6 @@
 # StreamTelecom
 
-Данный пакет разработан на основе API stream-telecom.ru (https://stream-telecom.ru/solutions/integrations/). 
+Данный пакет разработан на основе API stream-telecom.ru (https://stream-telecom.ru/solutions/integrations/).
 
 В данном пакете реализованы следующие методы:
 1. Просмотр баланса;
@@ -84,7 +84,7 @@ $st->hlr()->status(123456789101213);
 ```
 
 ## СМС
-Отправка СМС-сообщения 
+Отправка СМС-сообщения
 ```php
 $st->sms()->send()->text('text message')->to(['+79123456789', 79123456789, '+7(912)-345-67-89'])->get();
 ```
@@ -99,13 +99,13 @@ $phones_array  = [
 $phones_array2 = [79987654321];
 
 $st->sms()->send()
-    ->package(static function ($s) use ($phones_array) {
-        $s->text('test')->to($phones_array);
-    })
-    ->package(static function ($s) use ($phones_array2) {
-        $s->text('test2')->to($phones_array2);
-    })
-    ->get();
+->package(static function ($s) use ($phones_array) {
+    $s->text('test')->to($phones_array);
+})
+->package(static function ($s) use ($phones_array2) {
+    $s->text('test2')->to($phones_array2);
+})
+->get();
 ```
 Получение статуса СМС сообщения
 ```php
@@ -189,5 +189,5 @@ $st->viber()->messageId(12345)->get();
 ```
 ## VK
 ```php
-$st->setup()->viber('service');
+$st->setup()->vk('service');
 ```

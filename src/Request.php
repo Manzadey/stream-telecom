@@ -12,22 +12,18 @@ abstract class Request extends Session
      *
      * @return mixed
      */
-    final public function request(string $uri, array $data, string $method = 'POST')
+    final public function request(string $uri, array $data = [], string $method = 'POST')
     {
-        $query = 'form_params';
+        $method === 'GET' ? $query = 'query' : $query = 'form_params';
 
-        if ($method === 'GET') {
-            $query = 'query';
-        }
-
-        $data = array_filter(array_merge($data, [
+        $data[$query] = array_filter(array_merge($data, [
             'sessionId'     => $this->sessionId,
             'sourceAddress' => $this->sourceAddress,
             'login'         => $this->login,
             'pass'          => $this->password,
         ]));
 
-        $response = $this->client('rest')->request($method, $uri, [$query => $data])->getBody()->getContents();
+        $response = $this->client()->rest()->request($method, $uri, $data)->getBody()->getContents();
 
         return json_decode($response, true);
     }
@@ -43,12 +39,12 @@ abstract class Request extends Session
             throw new \RuntimeException('Установите пароль для Email! $c->setup()->email("password")');
         }
 
-        $data = array_filter(array_merge($data, [
+        $data['form_params'] = array_filter(array_merge($data, [
             'username' => $this->login,
             'password' => $this->passwordPa,
         ]));
 
-        $response = $this->client('email')->request('POST', Constants::SERVER_EMAIL, ['form_params' => $data])->getBody();
+        $response = $this->client()->email()->request('POST', '', $data)->getBody();
 
         return json_decode($response, true);
     }
@@ -64,13 +60,13 @@ abstract class Request extends Session
             throw new \RuntimeException('Установите Идентификатор группы ВКонтакте! $c->setup()->vk("serviceName")');
         }
 
-        $data = array_filter(array_merge($data, [
+        $data['json'] = array_filter(array_merge($data, [
             'login'   => $this->login,
             'pass'    => $this->password,
             'service' => $this->service,
         ]));
 
-        $response = $this->client('rest', 'json')->request('PUT', Constants::URI_VK_SEND, ['json' => $data])->getBody();
+        $response = $this->client()->rest('json')->request('PUT', Constants::URI_VK_SEND, $data)->getBody();
 
         return json_decode($response, true);
     }
@@ -81,23 +77,15 @@ abstract class Request extends Session
             throw new \RuntimeException('Установите Имя отправителя, зарегистрированное для Viber $c->setup()->viber("name")');
         }
 
-        if (!empty($data['textSMS'])) {
-            $data['sourceAddressSMS'] = $this->sourceAddress;
-        }
+        !empty($data['textSMS']) ? $data['sourceAddressSMS'] = $this->sourceAddress : null;
 
-        $data = array_filter(array_merge($data, [
+        $data['form_params'] = array_filter(array_merge($data, [
             'login'           => $this->login,
             'pass'            => $this->passwordPa,
             'sourceAddressIM' => $this->sourceAddressIM,
         ]));
 
-        if (isset($data['phones'])) {
-            foreach ($data['phones'] ad $item) {
-
-            }
-        }
-
-        $response = $this->client('rest')->request('POST', $uri, ['form_params' => $data])->getBody();
+        $response = $this->client()->rest()->request('POST', $uri, $data)->getBody();
 
         return json_decode($response, true);
 

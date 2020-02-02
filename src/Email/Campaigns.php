@@ -159,7 +159,7 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function personalizeToEmail(string $personalizeToEmail) : self
+    public function personalizeToEmail(string $personalizeToEmail = 'off') : self
     {
         $this->personalizeToEmail = $personalizeToEmail;
 
@@ -183,9 +183,9 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function trackOpens(string $track_opens) : self
+    public function noTrackOpens() : self
     {
-        $this->track_opens = $track_opens;
+        $this->track_opens = 'N';
 
         return $this;
     }
@@ -195,9 +195,9 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function trackClicks(string $track_clicks) : self
+    public function noTrackClicks() : self
     {
-        $this->track_clicks = $track_clicks;
+        $this->track_clicks = 'N';
 
         return $this;
     }
@@ -207,9 +207,9 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function plainClicks(string $plain_clicks) : self
+    public function plainClicks() : self
     {
-        $this->plain_clicks = $plain_clicks;
+        $this->plain_clicks = 'Y';
 
         return $this;
     }
@@ -219,9 +219,9 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function noImagesAdd(string $no_images_add) : self
+    public function noImagesAdd() : self
     {
-        $this->no_images_add = $no_images_add;
+        $this->no_images_add = 1;
 
         return $this;
     }
@@ -231,9 +231,9 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function analytics(string $analytics) : self
+    public function analytics() : self
     {
-        $this->analytics = $analytics;
+        $this->analytics = 'google';
 
         return $this;
     }
@@ -280,7 +280,7 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function delay(int $delay, string $type_delay) : self
+    public function delay(int $delay, string $type_delay = 'hour') : self
     {
         $this->delay_1 = $delay;
         $this->delay_2 = $type_delay;
@@ -303,7 +303,7 @@ class Campanings extends Job
      *
      * @return $this
      */
-    public function auto(int $auto) : self
+    public function auto(int $auto = 1) : self
     {
         $this->auto = $auto;
 

@@ -15,7 +15,7 @@ class Reports extends Job
      *
      * @return $this
      */
-    public function send(string $sent) : self
+    public function sent(string $sent) : self
     {
         $this->sent = $sent;
 

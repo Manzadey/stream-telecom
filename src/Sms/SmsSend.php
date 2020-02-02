@@ -105,6 +105,7 @@ class SmsSend implements ResponseInterface
     public function date(string $date)
     {
         $this->sendDate = Helpers::dateFormatToUtc($date);
+
         return $this;
     }
 
@@ -153,7 +154,7 @@ class SmsSend implements ResponseInterface
             $this->phone_data = json_encode($this->phone_data, true);
         }
 
-        $this->response = $this->streamTelecom->request($this->query_uri, get_object_vars($this));
+        $this->response = $this->streamTelecom->request()->uri($this->query_uri)->data(get_object_vars($this))->main()->get();
 
         $sms_response = new SmsResponse($this);
 

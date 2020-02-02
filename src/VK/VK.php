@@ -3,6 +3,7 @@
 namespace Manzadey\StreamTelecom\VK;
 
 use Manzadey\StreamTelecom\StreamTelecom;
+use Manzadey\StreamTelecom\Constants;
 
 class VK
 {
@@ -142,7 +143,7 @@ class VK
      */
     public function id(array $ids) : self
     {
-        $this->id = implode(',', $ids);
+        $this->id = implode(',', array_map('intval', $ids));
 
         return $this;
     }
@@ -152,6 +153,6 @@ class VK
      */
     public function get()
     {
-        return $this->streamTelecom->requestVK(get_object_vars($this));
+        return $this->streamTelecom->request()->data(get_object_vars($this))->method('PUT')->uri(Constants::URI_VK_SEND)->vk()->get();
     }
 }
