@@ -9,14 +9,14 @@ use Manzadey\StreamTelecom\Statistic\Statistic;
 use Manzadey\StreamTelecom\VK\VK;
 use Manzadey\StreamTelecom\Viber\Viber;
 
-class StreamTelecom extends Request
+class StreamTelecom extends Session
 {
     /**
      * @return float
      */
     public function balance() : float
     {
-        return (float) $this->request(Constants::URI_BALANCE, []);
+        return (float) $this->request()->uri(Constants::URI_BALANCE)->main()->get();
     }
 
     /**
@@ -24,7 +24,7 @@ class StreamTelecom extends Request
      */
     public function tariffs() : array
     {
-        return $this->request(Constants::URI_TARIFFS, []);
+        return $this->request()->uri(Constants::URI_TARIFFS)->main()->get();
     }
 
     /**

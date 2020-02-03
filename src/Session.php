@@ -2,7 +2,7 @@
 
 namespace Manzadey\StreamTelecom;
 
-use GuzzleHttp\Client;
+use Manzadey\StreamTelecom\Request\Request;
 
 abstract class Session
 {
@@ -39,7 +39,12 @@ abstract class Session
      *
      * @var string
      */
-    protected $sourceAddressIM;
+    protected $sourceAddressIM = 'NAVIGATOR';
+
+    /**
+     * @var string
+     */
+    protected $errorMsg;
 
     /**
      * Session constructor.
@@ -56,6 +61,9 @@ abstract class Session
 
         $this->setup()->session();
 
+        if (!$this->sessionId) {
+            throw new \Exception("Ошибка установки соединения с Stream Telecom. " . $this->errorMsg, 1);
+        }
     }
 
     /**
@@ -71,36 +79,14 @@ abstract class Session
      *
      * @return Client
      */
-    public function client(string $name) : Client
+    public function client() : Client
     {
-        $client = new Client();
+        return new Client();
+    }
 
-        if ($name === 'rest') {
-            $client = new Client([
-                'base_uri' => Constants::SERVER_REST,
-                'headers'  => [
-                    'content-type' => 'application/x-www-form-urlencoded',
-                ],
-            ]);
-        }
-
-        if ($name === 'email') {
-            $client = new Client([
-                'headers' => [
-                    'content-type' => 'application/x-www-form-urlencoded',
-                ],
-            ]);
-        }
-
-        if ($name === 'vk') {
-            new Client([
-                'headers' => [
-                    'content-type' => 'application/json',
-                ],
-            ]);
-        }
-
-        return $client;
+    public function request() : Request
+    {
+        return new Request(array_filter(get_object_vars($this)), $this->client());
     }
 
     /**
@@ -141,5 +127,13 @@ abstract class Session
     public function setSessionId(string $sessionId) : void
     {
         $this->sessionId = $sessionId;
+    }
+
+    /**
+     * @param string $errorMsg [Message of erorr]
+     */
+    public function setErrorMsg(string $errorMsg) : void
+    {
+        $this->errorMsg = $errorMsg;
     }
 }

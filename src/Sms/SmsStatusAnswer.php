@@ -31,23 +31,19 @@ class SmsStatusAnswer
      */
     public function __construct(array $response)
     {
-        $response = array_change_key_case($response, CASE_LOWER);
-
-        foreach ($response as $key => $item) {
+        foreach (array_change_key_case($response, CASE_LOWER) as $key => $item) {
             $this->$key = $item;
         }
     }
 
     /**
      * Статус сообщения
-     * 
+     *
      * @return mixed
      */
     public function getStateMessage()
     {
-        if (array_key_exists($this->state, Constants::MESSAGE_STATUSES)) {
-            return Constants::MESSAGE_STATUSES[$this->state];
-        }
+        return array_key_exists($this->state, Constants::MESSAGE_STATUSES) ? Constants::MESSAGE_STATUSES[$this->state] : $this->state;
     }
 
     /**
@@ -64,7 +60,7 @@ class SmsStatusAnswer
 
     /**
      *  Цена за сообщение.
-     * 
+     *
      * @return float
      */
     public function getPrice() : float

@@ -48,9 +48,7 @@ class HLRStatus
      */
     public function __construct($array)
     {
-        $array = array_change_key_case($array, CASE_LOWER);
-
-        foreach ($array as $key => $item) {
+        foreach (array_change_key_case($array, CASE_LOWER) as $key => $item) {
             $this->$key = $item;
         }
     }
@@ -62,18 +60,16 @@ class HLRStatus
      */
     public function getState() : string
     {
+        $msg    = 'Неизвестно';
         $states = [
             -1 => 'Номер находится в процессе проверки',
             0  => 'Абонент доступен',
             42 => 'Абонент недоступен',
         ];
 
-        if (array_key_exists($this->state, $states))
-        {
-            return $states[$this->state];
-        }
+        array_key_exists($this->state, $states) ? $msg = $states[$this->state] : null;
 
-        return 'Неизвестно';
+        return $msg;
     }
 
     /**
@@ -83,15 +79,13 @@ class HLRStatus
      */
     public function getProvider() : string
     {
+        $msg = 'Неизвестно';
         $providers = [
             25099 => 'Beeline',
         ];
 
-        if (array_key_exists($this->imsi, $providers))
-        {
-            return $providers[$this->imsi];
-        }
+        array_key_exists($this->imsi, $providers) ? $msg = $providers[$this->imsi] : null;
 
-        return 'Неизвестно';
+        return $msg;
     }
 }

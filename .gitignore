@@ -1,6 +1,6 @@
 composer.phar
 .idea
-index.php
+public
 build
 vendor
 tests/Support/temp

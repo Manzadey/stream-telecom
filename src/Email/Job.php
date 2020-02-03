@@ -8,11 +8,11 @@ use Manzadey\StreamTelecom\Constants;
 abstract class Job
 {
     /**
-     * @var int 
+     * @var int
      */
     protected $method_exists;
     /**
-     * @var StreamTelecom 
+     * @var StreamTelecom
      */
     protected $streamTelecom;
     /**
@@ -181,10 +181,7 @@ abstract class Job
             throw new \RuntimeException('Неизвестный метод');
         }
 
-        $data = array_merge(get_object_vars($this), ['method' => $this->method]);
-        $data = array_filter($data);
-
-        $response = $this->streamTelecom->requestEmail($data);
+        $response = $this->streamTelecom->request()->data(get_object_vars($this))->email()->get();
 
         return new EmailResponse($response);
     }

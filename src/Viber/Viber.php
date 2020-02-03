@@ -212,7 +212,7 @@ class Viber
      *
      * @return $this
      */
-    public function messageId(int $messageId) : self
+    public function status(int $messageId) : self
     {
         $this->messageId = $messageId;
 
@@ -222,9 +222,9 @@ class Viber
     /**
      * @return array
      */
-    public function data() : array
+    final public function data() : array
     {
-        return array_filter(get_object_vars($this));
+        return get_object_vars($this);
     }
 
     /**
@@ -232,8 +232,20 @@ class Viber
      */
     public function get()
     {
+        $response = $this->streamTelecom->request()->uri($this->setupUri())->data($this->data())->viber()->get();
 
-        $data = $this->data();
+        if ($this->setupUri() === Constants::URI_VIBER_STATUS) {
+            return new ViberStatusAnswer($this->messageId, $response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @return string
+     */
+    final private function uri() : string
+    {
         $uri  = Constants::URI_VIBER_SEND;
 
         if ($this->messageId) {
@@ -244,6 +256,6 @@ class Viber
             $uri = Constants::URI_VIBER_BULK;
         }
 
-        return $this->streamTelecom->requestViber($uri, $data);
+        return $uri;
     }
 }

@@ -1,6 +1,6 @@
 # StreamTelecom
 
-Данный пакет разработан на основе API stream-telecom.ru (https://stream-telecom.ru/solutions/integrations/). 
+Данный пакет разработан на основе API stream-telecom.ru (https://stream-telecom.ru/solutions/integrations/).
 
 В данном пакете реализованы следующие методы:
 1. Просмотр баланса;
@@ -84,7 +84,7 @@ $st->hlr()->status(123456789101213);
 ```
 
 ## СМС
-Отправка СМС-сообщения 
+Отправка СМС-сообщения
 ```php
 $st->sms()->send()->text('text message')->to(['+79123456789', 79123456789, '+7(912)-345-67-89'])->get();
 ```
@@ -99,13 +99,13 @@ $phones_array  = [
 $phones_array2 = [79987654321];
 
 $st->sms()->send()
-    ->package(static function ($s) use ($phones_array) {
-        $s->text('test')->to($phones_array);
-    })
-    ->package(static function ($s) use ($phones_array2) {
-        $s->text('test2')->to($phones_array2);
-    })
-    ->get();
+->package(static function ($s) use ($phones_array) {
+    $s->text('test')->to($phones_array);
+})
+->package(static function ($s) use ($phones_array2) {
+    $s->text('test2')->to($phones_array2);
+})
+->get();
 ```
 Получение статуса СМС сообщения
 ```php
@@ -183,7 +183,7 @@ $st->viber()->text('Привет вайбер')->image('https://my.site.com/imag
 ```php
 $st->viber()->text('Привет вайбер')->sms('Текст резервного сообщения по sms')->image('https://my.site.com/images/image.jpg')->buttonText('Нажми на кнопку ')->buttonUrl('stream-telecom.ru')->to([79211234567])->validity(7200)->get();
 ```
-Пакетная отправка 
+Пакетная отправка
 ```php
 $st->viber()
 ->package(static function ($v) {

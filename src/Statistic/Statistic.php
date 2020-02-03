@@ -158,7 +158,7 @@ class Statistic implements ResponseInterface
     public function detail() : self
     {
         $this->detail = true;
-        
+
         return $this;
     }
 
@@ -175,13 +175,9 @@ class Statistic implements ResponseInterface
             throw new \InvalidArgumentException('Укажите дату и время КОНЦА периода, за который необходимо получить статистику!');
         }
 
-        $uri = Constants::URI_STATISTIC;
+        $this->detail ? $uri = Constants::URI_STATISTIC_DETAIL : $uri = Constants::URI_STATISTIC;
 
-        if ($this->detail) {
-            $uri = Constants::URI_STATISTIC_DETAIL;
-        }
-
-        return $this->streamTelecom->request($uri, array_filter(get_object_vars($this)), 'GET');
+        return $this->streamTelecom->request()->uri($uri)->data(get_object_vars($this))->method('GET')->main()->get();
     }
 
     /**
@@ -191,7 +187,7 @@ class Statistic implements ResponseInterface
      */
     public function download(int $report_id)
     {
-        return $this->streamTelecom->request(Constants::URI_STATISTIC_DETAIL, ['id_report' => $report_id]);
+        return $this->streamTelecom->request()->uri(Constants::URI_STATISTIC_DETAIL)->data(compact('report_id'))->main()->get();
     }
 
 }

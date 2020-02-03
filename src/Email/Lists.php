@@ -34,7 +34,7 @@ class Lists extends Job
     /**
      * @var string
      */
-    protected $country;
+    protected $country = 'Российская Федерация';
     /**
      * @var string
      */
@@ -82,7 +82,7 @@ class Lists extends Job
     /**
      * @var string
      */
-    protected $gender;
+    protected $gender = 'n';
     /**
      * @var string
      */
@@ -103,7 +103,7 @@ class Lists extends Job
      */
     public function abuseEmail(string $email) : self
     {
-        $this->abuse_email = $email;
+        filter_var($email, FILTER_VALIDATE_EMAIL) !== false ? $this->abuse_email = $email : null;
 
         return $this;
     }
@@ -163,7 +163,8 @@ class Lists extends Job
      */
     public function zip(int $zip) : self
     {
-        $this->zip = $zip;
+
+        $this->zip = substr($zip, 0, 6);
 
         return $this;
     }
@@ -187,7 +188,7 @@ class Lists extends Job
      */
     public function url(string $url) : self
     {
-        $this->url = $url;
+        filter_var($url, FILTER_VALIDATE_URL) !== FALSE ? $this->url = $url : null;
 
         return $this;
     }
@@ -223,7 +224,7 @@ class Lists extends Job
      */
     public function email($email) : self
     {
-        $this->email = $email;
+        filter_var($email, FILTER_VALIDATE_EMAIL) !== false ? $this->email = $email : null;
 
         return $this;
     }
@@ -235,7 +236,7 @@ class Lists extends Job
      */
     public function file(string $file) : self
     {
-        $this->file = $file;
+        filter_var($file, FILTER_VALIDATE_URL) !== false ? $this->file = $file : null;
 
         return $this;
     }
@@ -308,9 +309,7 @@ class Lists extends Job
      */
     public function merge(int $id, string $data) : self
     {
-        if ($id > 10) {
-            $id = Constants::EMAIL_MERGE_MAX;
-        }
+        $id > 10 ? $id = Constants::EMAIL_MERGE_MAX : null;
 
         $merge = 'merge_' . $id;
 
@@ -324,9 +323,9 @@ class Lists extends Job
      *
      * @return $this
      */
-    public function update(bool $update) : self
+    public function update() : self
     {
-        $this->update = $update;
+        $this->update = true;
 
         return $this;
     }
@@ -348,9 +347,9 @@ class Lists extends Job
      *
      * @return $this
      */
-    public function noCheck(string $no_check) : self
+    public function noCheck() : self
     {
-        $this->no_check = $no_check;
+        $this->no_check = true;
 
         return $this;
     }

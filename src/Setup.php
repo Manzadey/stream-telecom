@@ -21,16 +21,21 @@ final class Setup
 
     public function session() : void
     {
-        $response = $this->session->client('rest')->request('POST', 'Session/', [
-            'form_params' => [
-                'login'    => $this->session->login,
-                'password' => $this->session->password,
-            ],
-        ]);
+        try {
+            $response = $this->session->client()->rest()->request('POST', Constants::URI_SESSION, [
+                'form_params' => [
+                    'login'    => $this->session->login,
+                    'password' => $this->session->password,
+                ],
+            ]);
 
-        $sessionId = json_decode($response->getBody(), true);
+            $sessionId = json_decode($response->getBody(), true);
 
-        $this->session->setSessionId($sessionId);
+            $this->session->setSessionId($sessionId);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->session->setErrorMsg($e->getMessage());
+            $this->session->setSessionId('');
+        }
     }
 
     /**

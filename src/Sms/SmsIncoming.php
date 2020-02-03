@@ -74,6 +74,6 @@ class SmsIncoming
             throw new \InvalidArgumentException('Укажите максимальное значение периода за который происходит выборка входящих сообщений!');
         }
 
-        return $this->streamTelecom->request(Constants::URI_SMS_INCOMING, array_filter(get_object_vars($this)), 'GET');
+        return $this->streamTelecom->request(Constants::URI_SMS_INCOMING, get_object_vars($this), 'GET');
     }
 }

@@ -34,7 +34,7 @@ class SmsStatus implements ResponseInterface
      */
     public function get() : SmsStatusAnswer
     {
-        $response = $this->streamTelecom->request(Constants::URI_STATUS_MESSAGE, get_object_vars($this));
+        $response = $this->streamTelecom->request()->uri(Constants::URI_STATUS_MESSAGE)->data(get_object_vars($this))->main()->get();
 
         return new SmsStatusAnswer($response);
     }

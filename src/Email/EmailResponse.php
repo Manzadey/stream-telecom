@@ -24,32 +24,30 @@ class EmailResponse
 
     private function isChecked() : void
     {
-        if ($this->data !== null) {
-            $this->success = true;
-        }
+        $this->data !== null ? $this->success = true : null;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getResponseMessage()
     {
-        return $this->msg['text'] ?? null;
+        return $this->msg['text'] ?? '';
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getErrorCode()
     {
-        return $this->msg['err_code'] ?? null;
+        return $this->msg['err_code'] ?? '';
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getMessageType()
     {
-        return $this->msg['type'] ?? null;
+        return $this->msg['type'] ?? '';
     }
 }

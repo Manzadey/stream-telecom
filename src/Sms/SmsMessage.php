@@ -19,10 +19,7 @@ class SmsMessage
      */
     public function __construct(array $response)
     {
-        $response = array_change_key_case($response, CASE_LOWER);
-
-
-        foreach ($response as $key => $item) {
+        foreach (array_change_key_case($response, CASE_LOWER) as $key => $item) {
             $this->$key = $item;
         }
 
