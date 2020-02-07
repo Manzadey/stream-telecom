@@ -27,10 +27,6 @@ trait Handling
      */
     private function handleResponse(string $response)
     {
-        if (array_key_exists($response, $this->errors)) {
-            return $this->errors[$response];
-        }
-
-        return (int) $response;
+        return array_key_exists($response, $this->errors) ? $this->errors[$response] : (int) $response;
     }
 }

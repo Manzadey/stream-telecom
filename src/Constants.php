@@ -7,6 +7,8 @@ class Constants
     public const SERVER_REST = 'https://gateway.api.sc/rest/';
     public const SERVER_EMAIL = 'http://api.streamemail.ru/';
 
+    public const VIBER_SOURCE = 'NAVIGATOR';
+
     public const URI_SESSION = 'Session/';
     public const URI_STATUS_MESSAGE = 'State/state.php';
     public const URI_SEND_HLR = 'Send/SendHLR/';
@@ -39,6 +41,45 @@ class Constants
         42  => 'Не доставлено',
         46  => 'Просрочено (истек срок жизни сообщения)',
         255 => 'Недоступно (статус в архиве/нет доступа к статусу)',
+    ];
+
+    public const HLR_STATUSES = [
+        -1 => 'Номер находится в процессе проверки',
+        0  => 'Абонент доступен',
+        42 => 'Абонент недоступен',
+    ];
+
+    public const HLR_ERRORS = [
+        '0x030000' => 'Абонент доступен',
+        '0x030100' => 'Абонент не найден',
+        '0x0301FF' => 'Абонент не найден',
+        '0x030B00' => 'Телекоммуникационный сервис не предоставляется',
+        '0x030BFF' => 'Телекоммуникационный сервис не предоставляется',
+        '0x030D00' => 'Вызов запрещен',
+        '0x030DFF' => 'Вызов запрещен',
+        '0x031B00' => 'Абонент не доступен',
+        '0x031BFF' => 'Абонент не доступен',
+        '0x03FA00' => 'Истек таймаут ожидания ответа',
+        '0x03FB00' => 'Истек таймаут ожидания ответа',
+        '0x03FE00' => 'Отсутствует ответ телефонной части',
+        '0x03FF00' => 'Истек таймаут ожидания ответа',
+        '0x03FFFB' => 'Истек таймаут ожидания ответа',
+        '0x0323FF' => 'Отсутствие данных',
+        '0x032400' => 'Отсутствие данных',
+    ];
+
+    public const VIBER_STATUSES = [
+        'delivered'   => 'Доставлено',
+        'undelivered' => 'Не доставлено',
+        'sent'        => 'Отправлено',
+        'read'        => 'Прочитано',
+        'expired'     => 'Просрочено',
+    ];
+
+    public const VIBER_ERRORS = [
+        'user-blocked'      => 'Абонент заблокирован',
+        'not-viber-user'    => 'Абонент не является пользователем Viber',
+        'filtered'          => 'Сообщение не соответствует ни одному зарегистрированному шаблону',
     ];
 
     public const EMAIL_MERGE_MAX = 10;
@@ -84,5 +125,15 @@ class Constants
         'reports.summary',
         'reports.clients',
         'reports.geo',
+    ];
+
+    public const PRICE_RUS = [
+        'РОССИЯ, Russia',
+        'МТС',
+        'Мегафон',
+        'СМАРТС',
+        'Скартелл (YOTA)',
+        'ТЕЛЕ2',
+        'Билайн',
     ];
 }

@@ -2,31 +2,49 @@
 
 namespace Manzadey\StreamTelecom\Viber;
 
+use Manzadey\StreamTelecom\Constants;
+
 class ViberStatusAnswer
 {
-    public function __construct(int $messageId, array $array)
-    {
-        $this->messageId = $messageId;
-        $this->delivery_method = array_keys($array[$messageId])[0];
+    /**
+     * @var int|string|null 
+     */
+    public $delivery_method;
+    /**
+     * @var int
+     */
+    public $error;
+    /**
+     * @var string
+     */
+    public $state;
+    /**
+     * @var float
+     */
+    public $price;
+    /**
+     * @var string
+     */
+    public $state_time;
+    /**
+     * @var string
+     */
+    public $state_error;
 
-        foreach ($array[$messageId][$this->delivery_method] as $k => $value) {
+    public function __construct(array $array)
+    {
+        $data = array_shift($array);
+
+        $this->delivery_method = array_key_first($data);
+        
+        foreach (array_shift($data) as $k => $value) {
             $this->$k = $value;
         }
-
-        $this->error === 0 ? $this->error = false : $this->error = true;
     }
 
     public function getStateMessage() : string
     {
-        $states = [
-            'delivered'     => 'Доставлено',
-            'undelivered'   => 'Не доставлено',
-            'sent'          => 'Отправлено',
-            'read'          => 'Прочитано',
-            'expired'       => 'Просрочено',
-        ];
-
-        return array_key_exists($this->state, $states) ? $states[$this->state] : $this->state;
+        return array_key_exists($this->state, Constants::VIBER_STATUSES) ? Constants::VIBER_STATUSES[$this->state] : $this->state;
     }
 
     /**
@@ -46,12 +64,6 @@ class ViberStatusAnswer
 
     public function getStateErrorMessage()
     {
-        $errors = [
-            'user-blocked'      => 'Абонент заблокирован',
-            'not-viber-user'    => 'Абонент не является пользователем Viber',
-            'filtered'          => 'Сообщение не соответствует ни одному зарегистрированному шаблону',
-        ];
-
-        return array_key_exists($this->error_info, $errors) ? $errors[$this->error_info] : $this->state;
+        return array_key_exists($this->state_error, Constants::VIBER_ERRORS) ? Constants::VIBER_ERRORS[$this->state_error] : $this->state;
     }
 }

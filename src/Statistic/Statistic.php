@@ -167,17 +167,9 @@ class Statistic implements ResponseInterface
      */
     public function get()
     {
-        if ($this->startDateTime === null) {
-            throw new \InvalidArgumentException('Укажите дату и время НАЧАЛА периода, за который необходимо получить статистику!');
-        }
-
-        if ($this->endDateTime === null) {
-            throw new \InvalidArgumentException('Укажите дату и время КОНЦА периода, за который необходимо получить статистику!');
-        }
-
-        $this->detail ? $uri = Constants::URI_STATISTIC_DETAIL : $uri = Constants::URI_STATISTIC;
-
-        return $this->streamTelecom->request()->uri($uri)->data(get_object_vars($this))->method('GET')->main()->get();
+        $this->validated();
+        
+        return $this->streamTelecom->request()->uri($this->uri())->data(get_object_vars($this))->method('GET')->main()->get();
     }
 
     /**
@@ -188,6 +180,25 @@ class Statistic implements ResponseInterface
     public function download(int $report_id)
     {
         return $this->streamTelecom->request()->uri(Constants::URI_STATISTIC_DETAIL)->data(compact('report_id'))->main()->get();
+    }
+
+    /**
+     * @return string
+     */
+    protected function uri() : string
+    {
+        return $this->detail ? Constants::URI_STATISTIC_DETAIL : Constants::URI_STATISTIC;
+    }
+
+    protected function validated() : void
+    {
+        if ($this->startDateTime === null) {
+            throw new \InvalidArgumentException('Укажите дату и время НАЧАЛА периода, за который необходимо получить статистику!');
+        }
+
+        if ($this->endDateTime === null) {
+            throw new \InvalidArgumentException('Укажите дату и время КОНЦА периода, за который необходимо получить статистику!');
+        }
     }
 
 }

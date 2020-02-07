@@ -6,6 +6,7 @@ use Manzadey\StreamTelecom\Email\Email;
 use Manzadey\StreamTelecom\HLR\HLR;
 use Manzadey\StreamTelecom\Sms\Sms;
 use Manzadey\StreamTelecom\Statistic\Statistic;
+use Manzadey\StreamTelecom\Tariff\Tariff;
 use Manzadey\StreamTelecom\VK\VK;
 use Manzadey\StreamTelecom\Viber\Viber;
 
@@ -20,11 +21,12 @@ class StreamTelecom extends Session
     }
 
     /**
-     * @return array
+     * @return Tariff
      */
-    public function tariffs() : array
+    public function tariffs() : Tariff
     {
-        return $this->request()->uri(Constants::URI_TARIFFS)->main()->get();
+        $response = $this->request()->uri(Constants::URI_TARIFFS)->main()->get();
+        return new Tariff($response);
     }
 
     /**

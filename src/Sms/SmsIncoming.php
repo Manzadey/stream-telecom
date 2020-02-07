@@ -66,6 +66,13 @@ class SmsIncoming
      */
     public function get()
     {
+        $this->validated();
+
+        return $this->streamTelecom->request()->uri(Constants::URI_SMS_INCOMING)->data(get_object_vars($this))->method('GET')->main()->get();
+    }
+
+    protected function validated() : void
+    {
         if ($this->minDateUTC === null) {
             throw new \InvalidArgumentException('Укажите минимальное значение периода за который происходит выборка входящих сообщений!');
         }
@@ -73,7 +80,5 @@ class SmsIncoming
         if ($this->maxDateUTC === null) {
             throw new \InvalidArgumentException('Укажите максимальное значение периода за который происходит выборка входящих сообщений!');
         }
-
-        return $this->streamTelecom->request(Constants::URI_SMS_INCOMING, get_object_vars($this), 'GET');
     }
 }

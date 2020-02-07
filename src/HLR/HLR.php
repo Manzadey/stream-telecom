@@ -11,10 +11,6 @@ class HLR implements ResponseInterface
     /**
      * @var int
      */
-    private $messageId;
-    /**
-     * @var int
-     */
     private $phone;
     /**
      * @var StreamTelecom
@@ -46,9 +42,9 @@ class HLR implements ResponseInterface
     }
 
     /**
-     * @return $this
+     * @return int
      */
-    public function get() : self
+    public function get() : int
     {
         if ($this->phone === null) {
             throw new \InvalidArgumentException('Укажите номер телефона!');
@@ -56,9 +52,7 @@ class HLR implements ResponseInterface
 
         $response = $this->streamTelecom->request()->uri(Constants::URI_SEND_HLR)->data(['destinationAddress' => $this->phone])->main()->get();
 
-        $this->messageId = (int) $response[0];
-
-        return $this;
+        return (int) $response[0];
 
     }
 
@@ -67,13 +61,8 @@ class HLR implements ResponseInterface
      *
      * @return HLRStatus
      */
-    public function status(int $messageId = 0) : HLRStatus
+    public function status(int $messageId) : HLRStatus
     {
-        $this->messageId = $messageId ?? $this->messageId;
-
-        $response = $this->streamTelecom->request()->method('GET')->uri(Constants::URI_STATE_HLR)->data(get_object_vars($this))->main()->get();
-        $response['messageId'] = $this->messageId;
-
-        return new HLRStatus($response);
+        return new HLRStatus($this->streamTelecom, $messageId);
     }
 }

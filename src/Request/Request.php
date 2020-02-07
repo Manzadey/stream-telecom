@@ -6,55 +6,134 @@ use Manzadey\StreamTelecom\Client;
 
 final class Request
 {
+    /**
+     * @var string
+     */
     public $method = 'POST';
+    /**
+     * @var string
+     */
     public $uri = '';
+    /**
+     * @var array
+     */
     public $data = [];
+    /**
+     * @var Client
+     */
+    public $client;
+    /**
+     * @var string
+     */
+    public $passwordPa;
+    /**
+     * @var string
+     */
+    public $login;
+    /**
+     * @var string
+     */
+    public $sessionId;
+    /**
+     * @var string
+     */
+    public $sourceAddress;
+    /**
+     * @var string
+     */
+    public $password;
+    /**
+     * @var string
+     */
+    public $sourceAddressIM;
+    /**
+     * @var string
+     */
+    public $service;
 
+    /**
+     * Request constructor.
+     *
+     * @param array  $array
+     * @param Client $client
+     */
     public function __construct(array $array, Client $client)
     {
         $this->client = $client;
+
         foreach($array as $k => $item) {
             $this->$k = $item;
         }
     }
 
-    public function method($method)
+    /**
+     * @param string $method
+     *
+     * @return $this
+     */
+    public function method(string $method) : self
     {
         $this->method = $method;
 
         return $this;
     }
 
-    public function uri($uri)
+    /**
+     * @param string $uri
+     *
+     * @return Request
+     */
+    public function uri(string $uri) : self
     {
         $this->uri = $uri;
 
         return $this;
     }
 
-    public function data(array $data)
+    /**
+     * @param array $data
+     *
+     * @return Request
+     */
+    public function data(array $data) : self
     {
-        $this->data = $data;
+        if (isset($data['streamTelecom'])) {
+            unset($data['streamTelecom']);
+        }
+
+        $this->data = array_filter($data);
 
         return $this;
     }
 
-    public function main()
+    /**
+     * @return Main
+     */
+    public function main() : Main
     {
         return new Main($this);
     }
 
-    public function viber()
+    /**
+     * @return Viber
+     */
+    public function viber() : Viber
     {
         return new Viber($this);
     }
 
-    public function vk()
+    /**
+     * @return VK
+     */
+    public function vk() : VK
     {
         return new VK($this);
     }
 
-    public function email()
+    /**
+     * @return Email
+     */
+    public function email() : Email
     {
         return new Email($this);
     }

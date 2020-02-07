@@ -39,7 +39,7 @@ abstract class Session
      *
      * @var string
      */
-    protected $sourceAddressIM = 'NAVIGATOR';
+    protected $sourceAddressIM = Constants::VIBER_SOURCE;
 
     /**
      * @var string
@@ -52,6 +52,8 @@ abstract class Session
      * @param string $name
      * @param string $login
      * @param string $password
+     *
+     * @throws \Exception
      */
     final public function __construct(string $name, string $login, string $password)
     {
@@ -62,7 +64,7 @@ abstract class Session
         $this->setup()->session();
 
         if (!$this->sessionId) {
-            throw new \Exception("Ошибка установки соединения с Stream Telecom. " . $this->errorMsg, 1);
+            throw new \RuntimeException('Ошибка установки соединения с Stream Telecom. ' . $this->errorMsg, 1);
         }
     }
 
@@ -75,8 +77,6 @@ abstract class Session
     }
 
     /**
-     * @param string $name
-     *
      * @return Client
      */
     public function client() : Client
@@ -130,7 +130,7 @@ abstract class Session
     }
 
     /**
-     * @param string $errorMsg [Message of erorr]
+     * @param string $errorMsg [Message of error]
      */
     public function setErrorMsg(string $errorMsg) : void
     {

@@ -4,9 +4,14 @@ namespace Manzadey\StreamTelecom;
 
 use GuzzleHttp\Client as GClient;
 
-final class Client
+class Client
 {
-    public function rest($contentType = 'x-www-form-urlencoded')
+    /**
+     * @param string $contentType
+     *
+     * @return GClient
+     */
+    public function rest($contentType = 'x-www-form-urlencoded') : GClient
     {
          return new GClient([
             'base_uri' => Constants::SERVER_REST,
@@ -14,11 +19,14 @@ final class Client
                 'content-type' => 'application/' . $contentType,
             ],
         ]);
-
-        return $client;
     }
 
-    public function email($contentType = 'x-www-form-urlencoded')
+    /**
+     * @param string $contentType
+     *
+     * @return GClient
+     */
+    public function email($contentType = 'x-www-form-urlencoded') : GClient
     {
         return new GClient([
             'base_uri' => Constants::SERVER_EMAIL,

@@ -3,7 +3,6 @@
 namespace Manzadey\StreamTelecom\Sms;
 
 
-use Manzadey\StreamTelecom\Constants;
 use Manzadey\StreamTelecom\StreamTelecom;
 
 class Sms
@@ -44,7 +43,7 @@ class Sms
     /**
      * @return SmsIncoming
      */
-    public function incoming()
+    public function incoming() : SmsIncoming
     {
         return new SmsIncoming($this->streamTelecom);
     }

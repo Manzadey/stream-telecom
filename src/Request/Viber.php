@@ -4,24 +4,48 @@ namespace Manzadey\StreamTelecom\Request;
 
 class Viber extends Construct
 {
+    /**
+     * @return mixed
+     */
     public function get()
     {
-        if (!$this->request->sourceAddressIM) {
-            throw new \RuntimeException('Установите Имя отправителя, зарегистрированное для Viber.');
-        }
+        $this->validated();
 
-        !empty($this->request->data['textSMS']) ? $this->request->data['sourceAddressSMS'] = $this->request->sourceAddress : null;
+        dd($this->data());
+        
+        $response = $this->request->client->rest()->request($this->request->method, $this->request->uri, $this->data())->getBody();
 
-        $data['form_params'] = array_filter(array_merge($this->request->data, [
+        return json_decode($response, true);
+    }
+
+    /**
+     * @return array
+     */
+    protected function data() : array
+    {
+        $data['form_params'] = array_merge($this->request->data, [
             'login'           => $this->request->login,
             'pass'            => $this->request->password,
             'sourceAddressIM' => $this->request->sourceAddressIM,
-        ]));
+        ]);
 
-        dump($data, $this->request);
+        if (isset($data['form_params']['phones'])) {
+            foreach($data['form_params']['phones'] as $k => $phone) {
+                !empty($phone['textSMS']) ? $data['form_params']['phones'][$k]['sourceAddressSMS'] = $this->request->sourceAddress : null;
+            }
+        }
 
-        $response = $this->request->client->rest()->request($this->request->method, $this->request->uri, $data)->getBody();
+        if (!empty($data['form_params']['textSMS'])) {
+            $data['form_params']['sourceAddressSMS'] = $this->request->sourceAddress;
+        }
 
-        return json_decode($response, true);
+        return $data;
+    }
+
+    protected function validated() : void
+    {
+        if (empty($this->request->sourceAddressIM)) {
+            throw new \RuntimeException('Установите Имя отправителя, зарегистрированное для Viber.');
+        }
     }
 }

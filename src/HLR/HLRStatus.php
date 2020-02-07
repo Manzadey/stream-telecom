@@ -2,90 +2,40 @@
 
 namespace Manzadey\StreamTelecom\HLR;
 
+use Manzadey\StreamTelecom\Constants;
+use Manzadey\StreamTelecom\StreamTelecom;
+
 class HLRStatus
 {
     /**
-     *  Статус HLR-запроса
-     *
+     * @var StreamTelecom
+     */
+    private $streamTelecom;
+    /**
      * @var int
      */
-    private $state;
-    /**
-     * Международный идентификатор мобильного абонента (индивидуальный номер абонента).
-     *
-     * @var string
-     */
-    private $imsi;
-    /**
-     * Признак портированности номера. В случае портированности - 1, иначе - 0.
-     *
-     * @var int
-     */
-    private $port;
-    /**
-     * Код коммутатора, обслуживающего абонента.
-     *
-     * @var string
-     */
-    private $msc;
-    /**
-     * Код ошибки
-     *
-     * @var string
-     */
-    private $error;
-    /**
-     * Идентификатор HLR-запроса
-     *
-     * @var int
-     */
-    private $messageid;
+    private $messageId;
 
     /**
      * HLRStatus constructor.
      *
-     * @param $array
+     * @param StreamTelecom $streamTelecom
+     * @param int           $messageId
      */
-    public function __construct($array)
+    public function __construct(StreamTelecom $streamTelecom, int $messageId)
     {
-        foreach (array_change_key_case($array, CASE_LOWER) as $key => $item) {
-            $this->$key = $item;
-        }
+        $this->streamTelecom = $streamTelecom;
+        $this->messageId     = $messageId;
     }
 
     /**
-     * Текстовый статус HLR-запроса
-     *
-     * @return string
+     * @return HLRStatusAnswer
      */
-    public function getState() : string
+    public function get() : HLRStatusAnswer
     {
-        $msg    = 'Неизвестно';
-        $states = [
-            -1 => 'Номер находится в процессе проверки',
-            0  => 'Абонент доступен',
-            42 => 'Абонент недоступен',
-        ];
+        $response              = $this->streamTelecom->request()->method('GET')->uri(Constants::URI_STATE_HLR)->data(get_object_vars($this))->main()->get();
+        $response['messageId'] = $this->messageId;
 
-        array_key_exists($this->state, $states) ? $msg = $states[$this->state] : null;
-
-        return $msg;
-    }
-
-    /**
-     * Провайдер пользователя
-     *
-     * @return string
-     */
-    public function getProvider() : string
-    {
-        $msg = 'Неизвестно';
-        $providers = [
-            25099 => 'Beeline',
-        ];
-
-        array_key_exists($this->imsi, $providers) ? $msg = $providers[$this->imsi] : null;
-
-        return $msg;
+        return new HLRStatusAnswer($response);
     }
 }

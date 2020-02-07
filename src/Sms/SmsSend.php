@@ -2,6 +2,7 @@
 
 namespace Manzadey\StreamTelecom\Sms;
 
+use Closure;
 use Manzadey\StreamTelecom\Constants;
 use Manzadey\StreamTelecom\Interfaces\ResponseInterface;
 use Manzadey\StreamTelecom\StreamTelecom;
@@ -38,6 +39,10 @@ class SmsSend implements ResponseInterface
      * @var mixed
      */
     private $phone_data;
+    /**
+     * @var string
+     */
+    private $to;
 
     /**
      * SmsSend constructor.
@@ -85,10 +90,9 @@ class SmsSend implements ResponseInterface
         if (strpos($to, ',') !== false) {
             $this->query_uri = Constants::QUERY_MULTIPLE['uri'];
             $query           = Constants::QUERY_MULTIPLE['query'];
-            $this->$query    = $to;
-        } else {
-            $this->$query = $to;
         }
+
+        $this->$query = $to;
 
         return $this;
     }
@@ -126,16 +130,18 @@ class SmsSend implements ResponseInterface
     /**
      * Пакетная отправка СМС-сообщения
      *
-     * @param \Closure $closure
+     * @param Closure $closure
      *
      * @return $this
      */
-    public function package(\Closure $closure) : self
+    public function package(Closure $closure) : self
     {
         $array = [
             'phone' => $closure($this)->to,
             'text'  => $closure($this)->data,
         ];
+
+        dump($array);
 
         $this->phone_data['sms'][self::$count_package++] = $array;
 
@@ -147,18 +153,28 @@ class SmsSend implements ResponseInterface
     /**
      * @return array
      */
+    public function data() : array
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * @return array
+     */
     public function get() : array
+    {
+        $this->checkPhoneData();
+
+        $this->response = $this->streamTelecom->request()->uri($this->query_uri)->data($this->data())->main()->get();
+
+        return (new SmsResponse($this))->processingResponse();
+    }
+
+    protected function checkPhoneData() : void
     {
         if ($this->phone_data) {
             $this->query_uri  = Constants::QUERY_MULTIPLE_PACKET;
             $this->phone_data = json_encode($this->phone_data, true);
         }
-
-        $this->response = $this->streamTelecom->request()->uri($this->query_uri)->data(get_object_vars($this))->main()->get();
-
-        $sms_response = new SmsResponse($this);
-
-        return $sms_response->processingResponse();
-
     }
 }

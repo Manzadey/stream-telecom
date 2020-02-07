@@ -173,6 +173,15 @@ abstract class Job
      */
     public function get()
     {
+        $this->validated();
+
+        $response = $this->streamTelecom->request()->data(get_object_vars($this))->email()->get();
+
+        return new EmailResponse($response);
+    }
+
+    protected function validated() : void
+    {
         if (strlen($this->method) === $this->method_exists) {
             throw new \RuntimeException('Укажите метод!');
         }
@@ -180,9 +189,5 @@ abstract class Job
         if (!in_array($this->method, Constants::EMAIL_METHODS, true)) {
             throw new \RuntimeException('Неизвестный метод');
         }
-
-        $response = $this->streamTelecom->request()->data(get_object_vars($this))->email()->get();
-
-        return new EmailResponse($response);
     }
 }

@@ -4,7 +4,6 @@ namespace Manzadey\StreamTelecom\Viber;
 
 use Manzadey\StreamTelecom\Constants;
 use Manzadey\StreamTelecom\StreamTelecom;
-use Manzadey\StreamTelecom\Support\Helpers;
 
 class Viber
 {
@@ -49,6 +48,10 @@ class Viber
      * @var array
      */
     private $phones;
+    /**
+     * @var bool
+     */
+    private $cascade;
 
     /**
      * Viber constructor.
@@ -111,6 +114,19 @@ class Viber
             return in_array($a, $fields, true);
         }, ARRAY_FILTER_USE_KEY);
 
+        $attributes = $this->setupTypeViberMessage($attributes);
+
+        $this->phones[self::$count_package++] = $attributes;
+
+        foreach (array_keys($attributes) as $attribute) {
+            unset($this->$attribute);
+        }
+
+        return $this;
+    }
+
+    private function setupTypeViberMessage(array $attributes) : array
+    {
         $attributes['type_viber'] = 'text';
 
         if (isset($attributes['imageURL'])) {
@@ -121,13 +137,7 @@ class Viber
             $attributes['type_viber'] = 'button';
         }
 
-        $this->phones[self::$count_package++] = $attributes;
-
-        foreach (array_keys($attributes) as $attribute) {
-            unset($this->$attribute);
-        }
-
-        return $this;
+        return $attributes;
     }
 
     /**
@@ -194,13 +204,10 @@ class Viber
      *
      * @return $this
      */
-    public function sms(string $text = null) : self
+    public function cascade(string $text = null) : self
     {
-        if ($this->textIM === null) {
-            throw new \RuntimeException('Укажите текст сообщения!');
-        }
-
-        $this->textSMS = $text ?? $this->textIM;
+        $this->cascade = true;
+        $this->textSMS = $text;
 
         return $this;
     }
@@ -210,19 +217,17 @@ class Viber
      *
      * @param int $messageId
      *
-     * @return $this
+     * @return ViberStatus
      */
-    public function status(int $messageId) : self
+    public function status(int $messageId) : ViberStatus
     {
-        $this->messageId = $messageId;
-
-        return $this;
+        return new ViberStatus($this->streamTelecom, $messageId);
     }
 
     /**
      * @return array
      */
-    final public function data() : array
+    public function data() : array
     {
         return get_object_vars($this);
     }
@@ -232,30 +237,16 @@ class Viber
      */
     public function get()
     {
-        $response = $this->streamTelecom->request()->uri($this->setupUri())->data($this->data())->viber()->get();
+        $this->cascade ? $this->textSMS = $this->textSMS ?? $this->textIM : null;
 
-        if ($this->setupUri() === Constants::URI_VIBER_STATUS) {
-            return new ViberStatusAnswer($this->messageId, $response);
-        }
-
-        return $response;
+        return $this->streamTelecom->request()->uri($this->uri())->data($this->data())->viber()->get();
     }
 
     /**
      * @return string
      */
-    final private function uri() : string
+    private function uri() : string
     {
-        $uri  = Constants::URI_VIBER_SEND;
-
-        if ($this->messageId) {
-            $uri = Constants::URI_VIBER_STATUS;
-        }
-
-        if ($this->phones) {
-            $uri = Constants::URI_VIBER_BULK;
-        }
-
-        return $uri;
+        return (bool) $this->phones ? Constants::URI_VIBER_BULK : Constants::URI_VIBER_SEND;
     }
 }

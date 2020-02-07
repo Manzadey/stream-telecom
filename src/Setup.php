@@ -2,6 +2,8 @@
 
 namespace Manzadey\StreamTelecom;
 
+use GuzzleHttp\Exception\ClientException;
+
 final class Setup
 {
     /**
@@ -32,7 +34,7 @@ final class Setup
             $sessionId = json_decode($response->getBody(), true);
 
             $this->session->setSessionId($sessionId);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        } catch (ClientException $e) {
             $this->session->setErrorMsg($e->getMessage());
             $this->session->setSessionId('');
         }
