@@ -70,6 +70,76 @@ abstract class Job
 
         return $this;
     }
+    
+    /**
+     * @return $this
+     */
+    public function delete() : self
+    {
+        $this->method .= 'delete';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function getMembers() : self
+    {
+        $this->method .= 'get_members';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function upload() : self
+    {
+        $this->method .= 'upload';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function addMember() : self
+    {
+        $this->method .= 'add_member';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function updateMember() : self
+    {
+        $this->method .= 'update_member';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function deleteMember() : self
+    {
+        $this->method .= 'delete_member';
+        
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function unsubscribeMember() : self
+    {
+        $this->method .= 'unsubscribe_member';
+        
+        return $this;
+    }
 
     /**
      * @param int $list_id
