@@ -88,6 +88,9 @@ abstract class Session
         return new Client();
     }
 
+    /**
+     * @return Request
+     */
     public function request() : Request
     {
         return new Request(array_filter(get_object_vars($this)), $this->client());
@@ -99,6 +102,14 @@ abstract class Session
     public function getSessionId() : string
     {
         return $this->sessionId;
+    }
+
+    /**
+     * @return bool 
+     */
+    public function sessionExists() : bool
+    {
+        return $this->sessionId !== '';
     }
 
     /**
