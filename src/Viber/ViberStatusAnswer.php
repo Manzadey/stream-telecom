@@ -37,7 +37,7 @@ class ViberStatusAnswer
 
         $this->delivery_method = array_key_first($data);
         
-        foreach (array_shift($data) as $k => $value) {
+        foreach ($data as $k => $value) {
             $this->$k = $value;
         }
     }
@@ -59,7 +59,7 @@ class ViberStatusAnswer
 
     public function getStateTime()
     {
-        return new \DateTime($this->state_time);
+        return $this->state_time !== 'null' ? new \DateTime($this->state_time) : null;
     }
 
     public function getStateErrorMessage()
