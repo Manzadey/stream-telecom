@@ -157,6 +157,6 @@ abstract class Session
      */
     public function getErrorMsg() : string
     {
-        return $this->errorMsg;
+        return $this->errorMsg ?? '';
     }
 }
