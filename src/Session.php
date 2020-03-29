@@ -63,9 +63,13 @@ abstract class Session
 
         $this->setup()->session();
 
+        /*
+
         if (!$this->sessionId) {
             throw new \RuntimeException('Ошибка установки соединения с Stream Telecom. ' . $this->errorMsg, 1);
         }
+
+        */
     }
 
     /**
