@@ -159,4 +159,12 @@ abstract class Session
     {
         return $this->errorMsg ?? '';
     }
+
+    /**
+     * @return bool
+     */
+    public function hasErrorMsg() : bool
+    {
+        return !empty($this->errorMsg) ? true : false;
+    }
 }
