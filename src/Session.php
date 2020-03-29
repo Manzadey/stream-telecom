@@ -145,10 +145,18 @@ abstract class Session
     }
 
     /**
-     * @param string $errorMsg [Message of error]
+     * @param string $errorMsg
      */
     public function setErrorMsg(string $errorMsg) : void
     {
         $this->errorMsg = $errorMsg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorMsg() : string
+    {
+        return $this->errorMsg;
     }
 }
