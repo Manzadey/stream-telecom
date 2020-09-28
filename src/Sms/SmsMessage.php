@@ -11,6 +11,8 @@ class SmsMessage
      * @var bool
      */
     public $created = false;
+    
+    public $message_id = '';
 
     /**
      * SmsMessage constructor.
@@ -31,9 +33,7 @@ class SmsMessage
      */
     private function checkMessageId() : void
     {
-        $message_id = Constants::MESSAGE_ID;
-
-        if ($this->$message_id) {
+        if ($this->message_id) {
             $this->created = true;
         }
     }
