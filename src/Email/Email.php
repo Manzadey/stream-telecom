@@ -30,11 +30,11 @@ class Email
     }
 
     /**
-     * @return Campanings
+     * @return Campaigns
      */
-    public function campanings() : Campanings
+    public function campanings() : Campaigns
     {
-        return new Campanings($this->streamTelecom);
+        return new Campaigns($this->streamTelecom);
     }
 
     /**

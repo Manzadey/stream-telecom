@@ -2,7 +2,7 @@
 
 namespace Manzadey\StreamTelecom\Email;
 
-class Campanings extends Job
+class Campaigns extends Job
 {
     protected $method = 'campaigns.';
     /**
