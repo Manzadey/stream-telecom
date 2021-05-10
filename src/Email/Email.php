@@ -32,7 +32,7 @@ class Email
     /**
      * @return Campaigns
      */
-    public function campanings() : Campaigns
+    public function campaigns() : Campaigns
     {
         return new Campaigns($this->streamTelecom);
     }
