@@ -179,8 +179,6 @@ class Campaigns extends Job
     }
 
     /**
-     * @param string $track_opens
-     *
      * @return $this
      */
     public function noTrackOpens() : self
@@ -191,8 +189,6 @@ class Campaigns extends Job
     }
 
     /**
-     * @param string $track_clicks
-     *
      * @return $this
      */
     public function noTrackClicks() : self
@@ -203,8 +199,6 @@ class Campaigns extends Job
     }
 
     /**
-     * @param string $plain_clicks
-     *
      * @return $this
      */
     public function plainClicks() : self
@@ -215,8 +209,6 @@ class Campaigns extends Job
     }
 
     /**
-     * @param string $no_images_add
-     *
      * @return $this
      */
     public function noImagesAdd() : self
@@ -227,8 +219,6 @@ class Campaigns extends Job
     }
 
     /**
-     * @param string $analytics
-     *
      * @return $this
      */
     public function analytics() : self
